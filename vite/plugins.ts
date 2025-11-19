@@ -38,7 +38,7 @@ export default function createVitePlugins(viteEnv, isBuild = false) {
     }),
 
     // https://github.com/vuejs/devtools-next
-    viteEnv.VITE_OPEN_DEVTOOLS === 'true' && VueDevTools(),
+    viteEnv.VITE_OPEN_DEVTOOLS && viteEnv.VITE_OPEN_DEVTOOLS === 'true' && VueDevTools(),
 
     // https://github.com/unplugin/unplugin-auto-import
     autoImport({
@@ -77,7 +77,7 @@ export default function createVitePlugins(viteEnv, isBuild = false) {
       logger: !isBuild,
       include: 'src/mock',
       infixName: false,
-      enableProd: isBuild && viteEnv.VITE_BUILD_MOCK === 'true',
+      enableProd: isBuild && viteEnv.VITE_BUILD_MOCK && viteEnv.VITE_BUILD_MOCK === 'true',
     }),
 
     // https://github.com/dishait/vite-plugin-vue-meta-layouts
@@ -94,8 +94,8 @@ export default function createVitePlugins(viteEnv, isBuild = false) {
     }),
 
     // https://github.com/nonzzz/vite-plugin-compression
-    isBuild && viteEnv.VITE_BUILD_COMPRESS.split(',').includes('gzip') && compression(),
-    isBuild && viteEnv.VITE_BUILD_COMPRESS.split(',').includes('brotli') && compression({
+    isBuild && viteEnv.VITE_BUILD_COMPRESS && viteEnv.VITE_BUILD_COMPRESS.split(',').includes('gzip') && compression(),
+    isBuild && viteEnv.VITE_BUILD_COMPRESS && viteEnv.VITE_BUILD_COMPRESS.split(',').includes('brotli') && compression({
       exclude: [/\.(br)$/, /\.(gz)$/],
       algorithm: 'brotliCompress',
     }),
@@ -109,7 +109,7 @@ export default function createVitePlugins(viteEnv, isBuild = false) {
           outDir = resolvedConfig.build.outDir
         },
         async closeBundle() {
-          if (['zip', 'tar'].includes(viteEnv.VITE_BUILD_ARCHIVE)) {
+          if (viteEnv.VITE_BUILD_ARCHIVE && ['zip', 'tar'].includes(viteEnv.VITE_BUILD_ARCHIVE)) {
             await sleep(1000)
             const archive = archiver(viteEnv.VITE_BUILD_ARCHIVE, {
               ...(viteEnv.VITE_BUILD_ARCHIVE === 'zip' && { zlib: { level: 9 } }),
@@ -140,13 +140,13 @@ export default function createVitePlugins(viteEnv, isBuild = false) {
       name: 'vite-plugin-debug-plugin',
       transform: (code, id) => {
         if (/src\/main.ts$/.test(id)) {
-          if (viteEnv.VITE_APP_DEBUG_TOOL === 'eruda') {
+          if (viteEnv.VITE_APP_DEBUG_TOOL && viteEnv.VITE_APP_DEBUG_TOOL === 'eruda') {
             code = code.concat(`
               import eruda from 'eruda'
               eruda.init()
             `)
           }
-          else if (viteEnv.VITE_APP_DEBUG_TOOL === 'vconsole') {
+          else if (viteEnv.VITE_APP_DEBUG_TOOL && viteEnv.VITE_APP_DEBUG_TOOL === 'vconsole') {
             code = code.concat(`
               import VConsole from 'vconsole'
               new VConsole()
@@ -164,7 +164,7 @@ export default function createVitePlugins(viteEnv, isBuild = false) {
       name: 'vite-plugin-disable-devtool',
       transform: (code, id) => {
         if (/src\/main.ts$/.test(id)) {
-          if (viteEnv.VITE_APP_DISABLE_DEVTOOL === 'true') {
+          if (viteEnv.VITE_APP_DISABLE_DEVTOOL && viteEnv.VITE_APP_DISABLE_DEVTOOL === 'true') {
             code = code.concat(`
               import DisableDevtool from 'disable-devtool'
               DisableDevtool({

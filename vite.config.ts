@@ -25,7 +25,7 @@ export default async ({ mode, command }) => {
       port: 9000,
       proxy: {
         '/proxy': {
-          target: env.VITE_APP_API_BASEURL,
+          target: env.VITE_APP_API_BASEURL || 'http://localhost:8000',
           changeOrigin: command === 'serve' && env.VITE_OPEN_PROXY === 'true',
           rewrite: path => path.replace(/\/proxy/, ''),
         },
@@ -34,7 +34,7 @@ export default async ({ mode, command }) => {
     // 构建选项 https://cn.vitejs.dev/config/build-options
     build: {
       outDir: mode === 'production' ? 'dist' : `dist-${mode}`,
-      sourcemap: env.VITE_BUILD_SOURCEMAP === 'true',
+      sourcemap: env.VITE_BUILD_SOURCEMAP && env.VITE_BUILD_SOURCEMAP === 'true',
     },
     define: {
       __SYSTEM_INFO__: JSON.stringify({
