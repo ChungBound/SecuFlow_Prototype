@@ -1,17 +1,21 @@
-import fs from 'node:fs'
-import path from 'node:path'
 import { defineFakeRoute } from 'vite-plugin-fake-server/client'
 import Mock from 'mockjs'
 
-// 模拟从文件读取矩阵数据
-function readMatrixFromFile(filename) {
-  const filePath = path.join(__dirname, filename)
-  const fileContent = fs.readFileSync(filePath, 'utf-8')
-  return JSON.parse(fileContent)
+// 为了避免在生产环境中加载大文件，使用示例数据
+// 在开发环境中，这些数据会被真实的 API 调用替换
+const caMatrix = {
+  "example@example.com": {
+    "example@example.com": 0,
+    "user@example.com": 1
+  }
 }
 
-const caMatrix = readMatrixFromFile('mock-file/ca_matrix.json')
-const crMatrix = readMatrixFromFile('mock-file/cr_matrix.json')
+const crMatrix = {
+  "example@example.com": {
+    "example@example.com": 0,
+    "user@example.com": 100
+  }
+}
 
 export default defineFakeRoute([
   {
