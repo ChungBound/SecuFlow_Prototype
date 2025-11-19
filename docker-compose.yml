@@ -1,4 +1,4 @@
-version: '3.8'
+version: "3.8"
 
 services:
   frontend:
@@ -20,4 +20,3 @@ services:
     environment:
       - ALLOWED_ORIGINS=http://localhost,http://localhost:80,http://frontend
     restart: always
-

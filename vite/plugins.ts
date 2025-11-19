@@ -77,7 +77,7 @@ export default function createVitePlugins(viteEnv, isBuild = false) {
       logger: !isBuild,
       include: 'src/mock',
       infixName: false,
-      enableProd: isBuild && viteEnv.VITE_BUILD_MOCK && viteEnv.VITE_BUILD_MOCK === 'true',
+      enableProd: isBuild && viteEnv.VITE_BUILD_MOCK === 'true',
     }),
 
     // https://github.com/dishait/vite-plugin-vue-meta-layouts
